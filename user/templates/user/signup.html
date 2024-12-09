@@ -1,0 +1,63 @@
+{% extends 'shop/base.html' %}
+
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    #ABC{
+      background-color: rgb(0, 0, 0);
+      margin-left: 37%;
+      width: 25%;
+      padding-right: 2%;
+      border-radius: 4%;
+      padding-top: 30px;
+      color: whitesmoke;
+    }
+  </style>
+</body>
+</html><br><br>
+
+<script>
+  function clickme()
+    {
+        alert("Thank You For Signup") 
+    }
+</script>
+
+<div id="ABC">
+<center>
+  <form action="/" method="post">
+    {% csrf_token %}
+    <div class="mb-3 form-check">
+        <label for="exampleInputEmail1" class="form-label" style="color: rgb(255, 255, 255);">Username</label>
+        <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      </div>
+      <div class="mb-3 form-check">
+        <label for="exampleInputPassword1" class="form-label" style="color: rgb(255, 255, 255);">Email</label>
+        <input type="email" name="email" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3 form-check">
+          <label for="exampleInputPassword1" class="form-label" style="color: rgb(253, 253, 253);">Password</label>
+          <input type="password" name="password1" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3 form-check">
+          <label for="exampleInputPassword1" class="form-label" style="color: rgb(255, 255, 255);">Confirm Password</label>
+          <input type="password" name="password2" class="form-control" id="exampleInputPassword1">
+          </div>
+        <div class="mb-3 form-check">
+        <button type="submit" class="btn btn-primary" value="signup" style="color: rgb(255, 255, 255);">signup</button><br>
+        Already have an account?
+        <a href="/login">Login </a>
+      </div><br>
+    </form>
+  </center>
+</div>
+{% endblock %}
+ 

@@ -1,0 +1,60 @@
+{% extends 'shop/base.html' %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    .ABC{
+      width: 30%;
+      margin-left: 30%;
+      margin-top: 5%;
+      background-color: black;
+      padding-top: 10px;
+      padding-left: 10px;
+      padding-bottom: 10px;
+      padding-right: 10px;
+      
+    }
+  </style>
+</body>
+</html>
+
+
+
+<div class="ABC">
+<form class="d-flex" role="search" action="/apple/search" method="post">
+    {% csrf_token %}
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="productname">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+</div><br><br>
+
+  {% if product %}
+
+  <div class="row">
+    {% for i in product %}
+    <div class="col-xl-3" id="d1">
+      <div class="card" style="width: 18rem;">
+      <img src="{{i.item_image.url}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{i.item_id}}</h5>
+          <p class="card-text">{{i.item_name}}</p>
+          <p class="card-text">{{i.item_desc}}</p>
+          <h5 class="card-text">{{i.item_price}}</h5>
+         <!-- <a href="/" class="btn btn-primary">Add To Cart</a> -->
+         <button type="submit"  name="pid" class="btn btn-primary" value="{{i.id}}">Add To Cart</button>
+        </div>
+      </div>
+    </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+
+  {% endblock %}

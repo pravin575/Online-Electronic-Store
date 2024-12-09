@@ -1,0 +1,158 @@
+
+{% extends 'shop/base.html' %}
+
+{% block body %}
+
+
+<div class="container mt-5 px-5 py-5">
+    
+        <form action="/order/" method="post">
+          {% csrf_token %}
+            <div class="row">
+        <div class="col-4 p-5 shadow">
+    <h3 style="background-color:rgb(0, 0, 0); color: whitesmoke; padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px;border-radius: 5px;">Enter Shipping details</h3>
+
+        <div class="col-10 mt-5">
+            <div class="input-group">
+          <input type="text" name="fname" class="form-control me-2" placeholder="Enter firstname" required>
+          <input type="text" name="lname" class="form-control" placeholder="Enter lastname" required>
+          </div>
+        </div>
+        
+        <div class="col-10 mt-5">
+          <div class="input-group has-validation">
+            <input type="email" name="email" class="form-control"  placeholder="Enter email">
+          </div>
+        </div>
+
+
+        <div class="col-10 mt-5">
+            <div class="input-group">
+          <input type="text" name="city" class="form-control me-3" placeholder="Enter City" required>
+          <select class="form-select" required>
+            <option selected disabled value="">Select State</option>
+            <option>Andhra Pradesh</option>
+            <option> Arunachal Pradesh</option>
+            <option>Assam	</option>
+            <option> Bihar	</option>
+            <option>Chhattisgara</option>
+            <option> Goa	</option>
+            <option> Gujarat	</option>
+            <option> Haryana	</option>
+            <option> Himachal Pradesh</option>	
+            <option> Jharkhand	</option>
+            <option> Karnataka	</option>
+            <option>Kerala	</option>
+            <option> Madhya Pradesh	</option>
+            <option> Maharashtra	</option>
+            <option> Manipur	Imphal	</option>
+            <option>Meghalaya	</option>
+            <option>Mizoram	Aizawl	</option>
+            <option> Nagaland	</option>
+            <option>Odisha	</option>
+            <option>Punjab	</option>
+            <option>Rajasthan	</option>
+            <option>Sikkim	Gangtok	</option>
+            <option>Tamil Nadu	</option>
+            <option>Telangana	</option>
+            <option> Tripura	Agartala	</option>
+            <option>Uttar Pradesh	</option>
+            <option>Uttarakhand</option>
+            <option> West Bengal</option>
+          </select>
+        </div>
+        </div>
+       <div class="col-4 mt-5">
+        <input type="text" name="zip" class="form-control" placeholder="Enter zipcode" required>
+
+       </div>
+        
+        </div>
+        <div class="col-8">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+            
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                  {% for i in products %}
+                  <tr>
+                    <th scope="row"><img src="{{i.image.url}}" alt="" height="150px" width="150px"></th>
+                    <td>{{i.name}}</td>
+                    <td> {{i.price}}</td>
+                    <td>{{i.quantity}}</td>
+                    <td> {{i.total_price}}</td>
+                  </tr>
+                  
+                  {% endfor %}
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Amount to be Paid</td>
+                    <td> {{total_amount}}</td>
+                  </tr>
+                </tbody>
+                
+              </table>
+              <div id="paypal-button-container"></div>
+              <div id="paypal-payment-id" name = "paypal-payment-id"></div>
+
+        </div>
+    </div>
+    <button class="btn btn-success" type="submit" name="paypal-button-id" id="paypal-button-id">Continue</button>
+    </form>
+   
+</div>
+
+
+{% endblock %}
+
+{% block content %}
+
+<script src="https://sandbox.paypal.com/sdk/js?client-id=ATdSqNeYolf5v-sWEQK7xdcXmy_dzXTaq8u2GZwY6UK3znde4b1iHcidwQ5gXsFC0JrspIlZJW8_-99M&components=buttons"></script>
+<script>
+    function initPayPalButton(){
+    paypal.Buttons({
+    style: {
+    shape: 'rect',
+    color: 'gold',
+    layout: 'vertical',
+    label: 'paypal',
+    },
+    
+    createOrder:function(data,actions){
+    return actions.order.create({
+    purchase_units: [{"amount":{"currency_code": "USD", "value": '0.01'}}]
+    });
+    },
+    onApprove:function(data,actions){
+    return actions.order.capture().then(function(orderData){
+    var paypalPaymentID = orderData.purchase_units[0].payments.captures[0].id;
+    // Full available details
+    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+    // Show a success message within this page, for example:
+    const element= document.getElementById('paypal-button-container');
+    element.innerHTML = '';
+    element.innerHTML = '<h3>Thank you for your payment!</h3>' + paypalPaymentID;
+    document.getElementById('paypal-payment-id').value = paypalPaymentID;
+    document.getElementById('paypal-button-id').value = paypalPaymentID;
+    document.getElementById('myform').submit();
+    // actions.redirect('http://127.0.0.1:8000/order/');
+    });
+    },
+    onError:function(err){
+    console.log(err);
+    }
+    }).render('#paypal-button-container');
+    }
+    initPayPalButton();
+</script>
+
+{% endblock %}
